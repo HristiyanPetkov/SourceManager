@@ -6,7 +6,7 @@ from schemas import organization as organization_schema
 
 
 def create_organization(organization: organization_schema.OrganizationCreate, db: Session):
-    db_organization = organization_model.Organization(name=organization.name, email=organization.email)
+    db_organization = organization_model.Organization(name=organization.name, mail=organization.mail)
     db.add(db_organization)
     db.commit()
     db.refresh(db_organization)

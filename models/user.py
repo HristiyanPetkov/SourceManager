@@ -4,9 +4,9 @@ from sqlalchemy.orm import relationship
 
 
 class User(Base):
-    __tablename__ = 'user'
+    __tablename__ = 'users'
     id = Column(Integer, primary_key=True)
     name = Column(String(50), nullable=False)
-    organization_id = Column(Integer, ForeignKey('organization.id'))
+    organization_id = Column(Integer, ForeignKey('organizations.id'))
 
-    organization = relationship("Organization", back_populates="users")
+    organization = relationship("Organization", back_populates="user")

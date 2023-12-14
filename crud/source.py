@@ -1,3 +1,6 @@
+from enum import Enum
+from ipaddress import IPv4Address, IPv4Network
+
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
 
@@ -5,7 +8,29 @@ from models import source as source_model
 from schemas import source as source_schema
 
 
+class SourceType(Enum):
+    ip = "ip"
+    domain = "domain"
+    ip_range = "ip_range"
+
+
 def create_source(source: source_schema.SourceCreate, db: Session):
+    try:
+        ip = IPv4Address(source.value)
+        source = SourceType.ip
+    except ValueError:
+        pass
+    try:
+        ip_range = IPv4Network(source.value)
+        source.type = SourceType.ip_range
+    except ValueError:
+        pass
+    try:
+        domain = source.value
+        source.type = SourceType.domain
+    except ValueError:
+        pass
+
     db_source = source_model.Source(type=source.type, value=source.value, organization_id=source.organization_id)
     db.add(db_source)
     db.commit()

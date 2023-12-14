@@ -4,7 +4,6 @@ from pydantic import BaseModel
 class OrganizationCreate(BaseModel):
     name: str
     mail: str
-    user: int
 
 
 class Organization(BaseModel):
