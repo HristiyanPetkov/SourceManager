@@ -3,7 +3,7 @@ from starlette.templating import Jinja2Templates
 
 from database import Base, engine
 from models import user, organization, source
-from routers import users, organizations, sources
+from routers import sources, users, organizations
 
 templates = Jinja2Templates(directory="templates")
 
