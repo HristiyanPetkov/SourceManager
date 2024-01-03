@@ -2,7 +2,7 @@ from fastapi import FastAPI, Request
 
 from database import Base, engine
 from models import user, organization, source
-from routers import sources, users, organizations
+from routers import sources, users, organizations, login
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
@@ -21,6 +21,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 @app.on_event("startup")
 def startup_event():
     Base.metadata.create_all(bind=engine, tables=[
@@ -33,8 +34,4 @@ def startup_event():
 app.include_router(users.router)
 app.include_router(organizations.router)
 app.include_router(sources.router)
-
-
-@app.get("/")
-def read_root():
-    return {"Hello": "World"}
+app.include_router(login.router)
