@@ -1,5 +1,6 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
+import {HostSelector} from "./HostSelector";
 
 interface Organization {
     name: string;
@@ -13,9 +14,13 @@ export const Manager = () => {
 
     return (
         <div>
-            <h2>Main Page</h2>
-            {organization && <p>Welcome, {organization.name}!</p>}
-            {/* Render other content based on user information */}
+            {
+                organization &&
+                <p>{organization.name}</p> &&
+                <p>{organization.mail}</p>
+            }
+            <HostSelector />
+
         </div>
     );
 }
