@@ -1,15 +1,26 @@
 import {useState} from "react";
 import "./activeContent.css";
-import {IPHosts} from "./IPHosts";
-import {IPRangeHosts} from "./IPRangeHosts";
-import {DomainHosts} from "./DomainHosts";
+import {Hosts} from "./Hosts";
+import {AddHost} from "./AddHost";
 
 export const HostSelector = () => {
 
     const [activeButton, setActiveButton] = useState<string>('button1');
+    const [activeType, setActiveType] = useState<string>('ips');
 
     const handleButtonClick = (buttonId: string) => {
         setActiveButton(buttonId);
+        if (buttonId === 'button1') {
+            setActiveType('ips');
+        } else if (buttonId === 'button2') {
+            setActiveType('ip_ranges');
+        } else if (buttonId === 'button3') {
+            setActiveType('domains');
+        }
+    };
+
+    const handleAddHostSuccess = () => {
+        console.log('Host added successfully');
     };
 
     return (
@@ -20,17 +31,12 @@ export const HostSelector = () => {
             <button onClick={() => handleButtonClick('button3')}>Domain host</button>
           </div>
 
-          <div id="content1" className={activeButton === 'button1' ? 'content active' : 'content'}>
-            <IPHosts />
-          </div>
+          <div id="content1" className={activeButton === 'button1' ? 'content active' : 'content'}/>
+          <div id="content2" className={activeButton === 'button2' ? 'content active' : 'content'}/>
+          <div id="content3" className={activeButton === 'button3' ? 'content active' : 'content'}/>
 
-          <div id="content2" className={activeButton === 'button2' ? 'content active' : 'content'}>
-            <IPRangeHosts />
-          </div>
-
-          <div id="content3" className={activeButton === 'button3' ? 'content active' : 'content'}>
-            <DomainHosts />
-          </div>
+            <Hosts hostType={activeType}/>
+            <AddHost onSuccess={handleAddHostSuccess}/>
         </div>
     );
 };

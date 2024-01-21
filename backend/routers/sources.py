@@ -22,6 +22,21 @@ def show(source_id: int, db: Session = Depends(get_db)):
     return source_crud.read_source(source_id, db)
 
 
+@router.get("/ips/", response_model=list[Source])
+def show(db: Session = Depends(get_db)):
+    return source_crud.read_source_ip_hosts(db)
+
+
+@router.get("/ip_ranges/", response_model=list[Source])
+def show(db: Session = Depends(get_db)):
+    return source_crud.read_source_ip_range_hosts(db)
+
+
+@router.get("/domains/", response_model=list[Source])
+def show(db: Session = Depends(get_db)):
+    return source_crud.read_source_domain_hosts(db)
+
+
 @router.post("/", response_model=Source)
 def create(source: SourceCreate, db: Session = Depends(get_db)):
     return source_crud.create_source(source, db)
