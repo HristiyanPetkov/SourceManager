@@ -6,7 +6,7 @@ from schemas import organization as organization_schema
 
 
 def create_organization(organization: organization_schema.OrganizationCreate, db: Session):
-    db_organization = organization_model.Organization(name=organization.name, mail=organization.mail)
+    db_organization = organization_model.Organization(name=organization.name)
     db.add(db_organization)
     db.commit()
     db.refresh(db_organization)
@@ -27,7 +27,6 @@ def update_organization(organization_id: int, organization: organization_schema.
     if not old_organization:
         raise HTTPException(status_code=404, detail="Organization not found")
     old_organization.name = organization.name
-    old_organization.email = organization.email
     db.commit()
     db.refresh(old_organization)
     return old_organization
@@ -47,3 +46,10 @@ def list_all(db: Session, skip: int = 0, limit: int = 100):
             .offset(skip)
             .limit(limit)
             .all())
+
+
+def get_organization_name(db: Session, organization_id: int) -> str:
+    organization = (db.query(organization_model.Organization)
+                    .filter(organization_model.Organization.id == organization_id)
+                    .first())
+    return organization.name if organization else None

@@ -8,6 +8,7 @@ interface AddHostFormProps {
 export const AddHost: React.FC<AddHostFormProps> = ({ onSuccess }) => {
   const [hostType, setHostType] = useState<string>('ip');
   const [hostValue, setHostValue] = useState<string>('');
+  const [comment, setComment] = useState<string>('');
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -16,11 +17,13 @@ export const AddHost: React.FC<AddHostFormProps> = ({ onSuccess }) => {
       await axios.post('http://127.0.0.1:8000/sources/', {
         type: hostType,
         value: hostValue,
-          organization_id: 1,
+        comment: comment,
+        organization_id: 1,
       });
 
       setHostType('ip');
       setHostValue('');
+      setComment('');
       onSuccess();
     } catch (error) {
       console.error('Error adding host:', error);
@@ -42,6 +45,11 @@ export const AddHost: React.FC<AddHostFormProps> = ({ onSuccess }) => {
         Host Value:
         <input type="text" value={hostValue} onChange={(e) => setHostValue(e.target.value)} />
       </label>
+
+        <label>
+            Comment:
+            <input type="text" value={comment} onChange={(e) => setComment(e.target.value)} />
+        </label>
 
       <button type="submit">Add Host</button>
     </form>

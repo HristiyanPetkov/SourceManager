@@ -32,7 +32,7 @@ def create_source(source: source_schema.SourceCreate, db: Session):
     except ValueError:
         pass
     '''
-    db_source = source_model.Source(type=source.type.name, value=source.value, organization_id=source.organization_id)
+    db_source = source_model.Source(type=source.type.name, value=source.value, comment=source.comment, organization_id=source.organization_id)
     db.add(db_source)
     db.commit()
     db.refresh(db_source)
@@ -52,8 +52,9 @@ def update_source(source_id: int, source: source_schema.SourceCreate, db: Sessio
     old_source = read_source(source_id, db)
     if not old_source:
         raise HTTPException(status_code=404, detail="Source not found")
-    old_source.type = source.type
+    old_source.type = source.type.name
     old_source.value = source.value
+    old_source.comment = source.comment
     old_source.organization_id = source.organization_id
     db.commit()
     db.refresh(old_source)

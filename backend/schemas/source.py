@@ -11,6 +11,7 @@ class SourceType(Enum):
 class SourceCreate(BaseModel):
     type: SourceType
     value: str
+    comment: str
     organization_id: int
 
 
@@ -19,4 +20,5 @@ class Source(BaseModel):
 
     type: SourceType
     value: str
+    comment: str
     organization_id: int

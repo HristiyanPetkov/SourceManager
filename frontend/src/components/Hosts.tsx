@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
 
 interface Host {
@@ -9,12 +9,13 @@ interface Host {
 
 interface HostsProps {
   hostType: string;
+  reload: boolean;
 }
 
-export const Hosts: React.FC<HostsProps> = ({ hostType }) => {
+export const Hosts: React.FC<HostsProps> = ({ hostType, reload }) => {
   const [hosts, setHosts] = useState<Host[]>([]);
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       if (hostType) {
         const response = await axios.get(`http://127.0.0.1:8000/sources/${hostType}/`);
@@ -23,18 +24,17 @@ export const Hosts: React.FC<HostsProps> = ({ hostType }) => {
     } catch (error) {
       console.error('Error fetching data:', error);
     }
-  };
+  }, [hostType]);
 
   useEffect(() => {
     fetchData().then(r => console.log(r));
-  }, [hostType]);
+  }, [hostType, reload, fetchData]);
 
   const handleDelete = async (hostId: number) => {
     try {
       await axios.delete(`http://127.0.0.1:8000/sources/${hostId}/`);
-
-      fetchData().then(r => console.log(r));
       console.log('Host deleted successfully');
+      fetchData(); // Trigger a reload after successfully deleting a host
     } catch (error) {
       console.error('Error deleting host:', error);
     }

@@ -6,7 +6,8 @@ from schemas import user as user_schema
 
 
 def create_user(user: user_schema.UserCreate, db: Session):
-    db_user = user_model.User(name=user.name, organization_id=user.organization_id)
+    db_user = user_model.User(name=user.name, email=user.email, comment=user.comment, phone=user.phone,
+                              organization_id=user.organization_id)
     db.add(db_user)
     db.commit()
     db.refresh(db_user)
@@ -27,6 +28,9 @@ def update_user(user_id: int, user: user_schema.UserCreate, db: Session):
     if not old_user:
         raise HTTPException(status_code=404, detail="User not found")
     old_user.name = user.name
+    old_user.email = user.email
+    old_user.comment = user.comment
+    old_user.phone = user.phone
     old_user.organization_id = user.organization_id
     db.commit()
     db.refresh(old_user)
