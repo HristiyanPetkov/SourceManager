@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import {Navbar} from "./components/Navbar";
 import {Manager} from "./components/Manager";
 import {Login} from "./components/Login";
+import './styles/tailwind.output.css';
 
 function App() {
     return (

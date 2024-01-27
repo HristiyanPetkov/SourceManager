@@ -31,10 +31,31 @@ export const HostSelector = () => {
 
   return (
     <div>
-      <div id="buttonContainer">
-        <button onClick={() => handleButtonClick("button1")}>Ip host</button>
-        <button onClick={() => handleButtonClick("button2")}>Ip range</button>
-        <button onClick={() => handleButtonClick("button3")}>Domain host</button>
+      <div id="buttonContainer" className="flex space-x-4 mb-4">
+        <button
+          onClick={() => handleButtonClick("button1")}
+          className={`bg-light-brown text-white py-2 px-4 rounded ${
+            activeButton === "button1" && "animate-pulse"
+          }`}
+        >
+          Ip host
+        </button>
+        <button
+          onClick={() => handleButtonClick("button2")}
+          className={`bg-light-brown text-white py-2 px-4 rounded ${
+            activeButton === "button2" && "animate-pulse"
+          }`}
+        >
+          Ip range
+        </button>
+        <button
+          onClick={() => handleButtonClick("button3")}
+          className={`bg-light-brown text-white py-2 px-4 rounded ${
+            activeButton === "button3" && "animate-pulse"
+          }`}
+        >
+          Domain host
+        </button>
       </div>
 
       <div

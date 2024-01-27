@@ -5,6 +5,7 @@ interface Host {
   id: number;
   value: string;
   type: string;
+  comment: string;
 }
 
 interface HostsProps {
@@ -14,6 +15,7 @@ interface HostsProps {
 
 export const Hosts: React.FC<HostsProps> = ({ hostType, reload }) => {
   const [hosts, setHosts] = useState<Host[]>([]);
+  const [expandedHostId, setExpandedHostId] = useState<number | null>(null);
 
   const fetchData = useCallback(async () => {
     try {
@@ -40,17 +42,36 @@ export const Hosts: React.FC<HostsProps> = ({ hostType, reload }) => {
     }
   };
 
+  const toggleExpand = (hostId: number) => {
+    setExpandedHostId((prevId) => (prevId === hostId ? null : hostId));
+  };
+
   return (
     <div>
-      <h1>Hosts</h1>
-      <ul>
-        {hosts.map((host) => (
-          <li key={host.id}>
-            {host.value}
-            <button onClick={() => handleDelete(host.id)}>Delete</button>
-          </li>
-        ))}
-      </ul>
+      {hosts.map((host) => (
+        <div
+          key={host.id}
+          className={`bg-[#F9F5F1] p-4 rounded mb-4 cursor-pointer flex justify-between items-center overflow-hidden transition-height ${
+            expandedHostId === host.id ? 'h-auto' : 'h-16'
+          }`}
+          onClick={() => toggleExpand(host.id)}
+        >
+          <div>
+            <p className="mb-2">{host.value}</p>
+            {expandedHostId === host.id && (
+              <p className="text-gray-500 italic">{host.comment}</p>
+            )}
+          </div>
+          {expandedHostId === host.id && (
+            <button
+              onClick={() => handleDelete(host.id)}
+              className="bg-red-500 text-white py-2 px-4 rounded"
+            >
+              Delete
+            </button>
+          )}
+        </div>
+      ))}
     </div>
   );
 };
