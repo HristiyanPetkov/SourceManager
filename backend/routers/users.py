@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 
 import crud.user as user_crud
 from dependencies import get_db
-from schemas.user import User, UserCreate
+from schemas.user import UserCreate, UserResponse
 
 router = APIRouter(
     prefix="/users",
@@ -12,22 +12,22 @@ router = APIRouter(
 )
 
 
-@router.get("/", response_model=list[User])
+@router.get("/", response_model=list[UserResponse])
 def index(db: Session = Depends(get_db)):
     return user_crud.list_all(db)
 
 
-@router.get("/{user_id}", response_model=User)
+@router.get("/{user_id}", response_model=UserResponse)
 def show(user_id: int, db: Session = Depends(get_db)):
     return user_crud.read_user(user_id, db)
 
 
-@router.post("/", response_model=User)
+@router.post("/", response_model=UserResponse)
 def create(user: UserCreate, db: Session = Depends(get_db)):
     return user_crud.create_user(user, db)
 
 
-@router.put("/{user_id}", response_model=User)
+@router.put("/{user_id}", response_model=UserResponse)
 def update(user_id: int, user: UserCreate, db: Session = Depends(get_db)):
     return user_crud.update_user(user_id, user, db)
 

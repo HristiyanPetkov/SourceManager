@@ -12,7 +12,7 @@ export const Login = () => {
             const data = await response.json();
 
             if (data) {
-                navigate('/home', { state: { organization: data } });
+                navigate('/home', { state: { user: data } });
             }
         } catch (error) {
             console.error('Login failed:', error);

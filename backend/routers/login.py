@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
 from dependencies import get_db
-import crud.organization as organization_crud
+import crud.user as user_crud
 from schemas.organization import Organization
 
 router = APIRouter(
@@ -14,4 +14,4 @@ router = APIRouter(
 
 @router.get("/", response_model=Organization)
 def index(db: Session = Depends(get_db)):
-    return organization_crud.read_organization(1, db)
+    return user_crud.read_user(1, db)

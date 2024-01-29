@@ -9,7 +9,7 @@ class UserCreate(BaseModel):
     organization_id: int
 
 
-class User(BaseModel):
+class UserResponse(BaseModel):
     id: int
 
     name: str
@@ -17,3 +17,4 @@ class User(BaseModel):
     comment: str
     phone: str
     organization_id: int
+    organization_name: str
