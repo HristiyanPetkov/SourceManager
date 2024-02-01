@@ -51,7 +51,7 @@ export const Hosts: React.FC<HostsProps> = ({ hostType, reload }) => {
       {hosts.map((host) => (
         <div
           key={host.id}
-          className={`bg-[#F9F5F1] p-4 rounded mb-4 cursor-pointer flex justify-between items-center overflow-hidden transition-height ${
+          className={`bg-light-blue p-4 rounded mb-4 cursor-pointer flex justify-between items-center overflow-hidden transition-height ${
             expandedHostId === host.id ? 'h-auto' : 'h-16'
           }`}
           onClick={() => toggleExpand(host.id)}

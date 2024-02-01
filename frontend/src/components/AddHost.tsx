@@ -31,7 +31,7 @@ export const AddHost: React.FC<AddHostFormProps> = ({ onSuccess }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="p-4 mb-4 bg-[#F9F5F1]">
+    <form onSubmit={handleSubmit} className="p-4 mb-4 bg-light-blue">
       <div className="mb-4">
         <label className="block">
           Host Type:
@@ -71,7 +71,7 @@ export const AddHost: React.FC<AddHostFormProps> = ({ onSuccess }) => {
         </label>
       </div>
 
-      <button type="submit" className="bg-light-brown text-white py-2 px-4 rounded">
+      <button type="submit" className="bg-dark-blue hover:bg-button-action text-white py-2 px-4 rounded">
         Add Host
       </button>
     </form>

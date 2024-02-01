@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 from dependencies import get_db
 import crud.user as user_crud
 from schemas.organization import Organization
+from schemas.user import UserLogin, UserResponse
 
 router = APIRouter(
     prefix="/login",
@@ -12,6 +13,7 @@ router = APIRouter(
 )
 
 
-@router.get("/", response_model=Organization)
-def index(db: Session = Depends(get_db)):
-    return user_crud.read_user(1, db)
+@router.post("/", response_model=UserResponse)
+def login(user: UserLogin, db: Session = Depends(get_db)):
+    return user_crud.login(user, db)
+

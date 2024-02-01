@@ -5,7 +5,6 @@ from fastapi import Header, HTTPException
 from database import SessionLocal
 
 
-# dependency to get the database session
 def get_db():
     db = SessionLocal()
     try:

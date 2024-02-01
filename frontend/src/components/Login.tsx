@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 export const Login = () => {
     const navigate = useNavigate();
@@ -8,8 +9,11 @@ export const Login = () => {
 
     const handleLogin = async () => {
         try {
-            const response = await fetch(`http://127.0.0.1:8000/login`);
-            const data = await response.json();
+            const response = await axios.post('http://127.0.0.1:8000/login/', {
+                                                email: email,
+                                                password: password,
+                                              });
+            const data = response.data;
 
             if (data) {
                 navigate('/home', { state: { user: data } });
@@ -22,7 +26,7 @@ export const Login = () => {
 
     return (
         <div className="flex items-center justify-center h-full">
-            <div className="bg-gray-100 p-8 rounded shadow-md w-96 flex flex-col items-center justify-center mt-40">
+            <div className="bg-light-blue p-8 rounded shadow-md w-96 flex flex-col items-center justify-center mt-40">
                 <h2 className="text-3xl font-bold mb-4">Login</h2>
                 <input
                     className="mb-4 p-2 border border-gray-300 rounded"
@@ -39,7 +43,7 @@ export const Login = () => {
                     onChange={(e) => setPassword(e.target.value)}
                 />
                 <button
-                    className="bg-blue-500 text-white font-bold py-2 px-4 rounded cursor-pointer"
+                    className="bg-dark-blue hover:bg-button-action text-white font-bold py-2 px-4 rounded cursor-pointer"
                     onClick={handleLogin}
                 >
                     Login
