@@ -31,14 +31,14 @@ export const AddHost: React.FC<AddHostFormProps> = ({ onSuccess }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="p-4 mb-4 bg-light-blue">
-      <div className="mb-4">
+    <form onSubmit={handleSubmit} className="p-4 mb-4 bg-light-blue rounded-lg">
+      <div className="mb-4 rounded-lg">
         <label className="block">
           Host Type:
           <select
             value={hostType}
             onChange={(e) => setHostType(e.target.value)}
-            className="border p-2 ml-2"
+            className="border p-2 ml-2 rounded-lg"
           >
             <option value="ip">IP</option>
             <option value="ip_range">IP Range</option>
@@ -54,7 +54,7 @@ export const AddHost: React.FC<AddHostFormProps> = ({ onSuccess }) => {
             type="text"
             value={hostValue}
             onChange={(e) => setHostValue(e.target.value)}
-            className="border p-2 ml-2"
+            className="border p-2 ml-2 rounded-lg"
           />
         </label>
       </div>
@@ -66,12 +66,12 @@ export const AddHost: React.FC<AddHostFormProps> = ({ onSuccess }) => {
             type="text"
             value={comment}
             onChange={(e) => setComment(e.target.value)}
-            className="border p-2 ml-2"
+            className="border p-2 ml-2 rounded-lg"
           />
         </label>
       </div>
 
-      <button type="submit" className="bg-dark-blue hover:bg-button-action text-white py-2 px-4 rounded">
+      <button type="submit" className="bg-dark-blue hover:bg-button-action text-white py-2 px-4 rounded-lg">
         Add Host
       </button>
     </form>

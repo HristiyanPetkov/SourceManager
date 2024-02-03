@@ -34,7 +34,7 @@ export const HostSelector = () => {
       <div id="buttonContainer" className="flex space-x-4 mb-4">
         <button
           onClick={() => handleButtonClick("button1")}
-          className={`bg-dark-blue hover:bg-button-action text-white py-2 px-4 rounded ${
+          className={`bg-dark-blue hover:bg-button-action text-white py-2 px-4 rounded-lg ${
             activeButton === "button1" && "animate-pulse"
           }`}
         >
@@ -42,7 +42,7 @@ export const HostSelector = () => {
         </button>
         <button
           onClick={() => handleButtonClick("button2")}
-          className={`bg-dark-blue hover:bg-button-action text-white py-2 px-4 rounded ${
+          className={`bg-dark-blue hover:bg-button-action text-white py-2 px-4 rounded-lg ${
             activeButton === "button2" && "animate-pulse"
           }`}
         >
@@ -50,7 +50,7 @@ export const HostSelector = () => {
         </button>
         <button
           onClick={() => handleButtonClick("button3")}
-          className={`bg-dark-blue hover:bg-button-action text-white py-2 px-4 rounded ${
+          className={`bg-dark-blue hover:bg-button-action text-white py-2 px-4 rounded-lg ${
             activeButton === "button3" && "animate-pulse"
           }`}
         >

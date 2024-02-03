@@ -1,8 +1,15 @@
 import React from 'react';
+import { useFilter } from '../context/FilterContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome } from '@fortawesome/free-solid-svg-icons';
 
-export const Navbar = () => {
+export const Navbar: React.FC = () => {
+  const { filter, setFilter } = useFilter();
+
+  const handleFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setFilter(event.target.value);
+  };
+
   return (
     <div>
       <header className="bg-dark-blue py-2">
@@ -11,6 +18,13 @@ export const Navbar = () => {
             <FontAwesomeIcon icon={faHome} className="w-6 h-6 m-2" />
             <h1 className="text-xl font-bold ml-2">Source Manager</h1>
           </a>
+          <input
+            type="text"
+            placeholder="Filter hosts"
+            className="border p-2 mr-4 rounded-md"
+            value={filter}
+            onChange={handleFilterChange}
+          />
         </div>
       </header>
     </div>

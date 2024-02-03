@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
+import { useFilter } from '../context/FilterContext'; // Update the path to match your project structure
 
 interface Host {
   id: number;
@@ -16,6 +17,7 @@ interface HostsProps {
 export const Hosts: React.FC<HostsProps> = ({ hostType, reload }) => {
   const [hosts, setHosts] = useState<Host[]>([]);
   const [expandedHostId, setExpandedHostId] = useState<number | null>(null);
+  const { filter} = useFilter(); // Use the filter from context
 
   const fetchData = useCallback(async () => {
     try {
@@ -29,7 +31,7 @@ export const Hosts: React.FC<HostsProps> = ({ hostType, reload }) => {
   }, [hostType]);
 
   useEffect(() => {
-    fetchData().then(r => console.log(r));
+    fetchData();
   }, [hostType, reload, fetchData]);
 
   const handleDelete = async (hostId: number) => {
@@ -46,12 +48,14 @@ export const Hosts: React.FC<HostsProps> = ({ hostType, reload }) => {
     setExpandedHostId((prevId) => (prevId === hostId ? null : hostId));
   };
 
+  const filteredHosts = hosts.filter((host) => host.value.includes(filter));
+
   return (
     <div>
-      {hosts.map((host) => (
+      {filteredHosts.map((host) => (
         <div
           key={host.id}
-          className={`bg-light-blue p-4 rounded mb-4 cursor-pointer flex justify-between items-center overflow-hidden transition-height ${
+          className={`bg-light-blue p-4 rounded-lg mb-4 cursor-pointer flex justify-between items-center overflow-hidden transition-height ${
             expandedHostId === host.id ? 'h-auto' : 'h-16'
           }`}
           onClick={() => toggleExpand(host.id)}
