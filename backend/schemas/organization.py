@@ -1,8 +1,8 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, constr
 
 
 class OrganizationCreate(BaseModel):
-    name: str
+    name: constr(min_length=1, max_length=100)
 
 
 class Organization(BaseModel):
