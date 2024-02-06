@@ -6,8 +6,14 @@ class UserCreate(BaseModel):
     email: EmailStr
     password: constr(min_length=8)
     comment: constr(max_length=255)
-    phone: constr(regex=r'^\d{10}$')
+    phone: constr(min_length=10, max_length=10)
     organization_id: int
+
+    @field_validator("phone")
+    def validate_phone(cls, value):
+        if not value.isdigit():
+            raise ValueError("Phone number must contain only digits")
+        return value
 
     @field_validator("password")
     def validate_password_strength(cls, value):

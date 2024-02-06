@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
-import { useFilter } from '../context/FilterContext'; // Update the path to match your project structure
+import { useFilter } from '../context/FilterContext';
+import { API_ENDPOINTS } from "../config/config";
 
 interface Host {
   id: number;
@@ -12,9 +13,10 @@ interface Host {
 interface HostsProps {
   hostType: string;
   reload: boolean;
+  onSuccess: () => void;
 }
 
-export const Hosts: React.FC<HostsProps> = ({ hostType, reload }) => {
+export const Hosts: React.FC<HostsProps> = ({ hostType, reload, onSuccess}) => {
   const [hosts, setHosts] = useState<Host[]>([]);
   const [expandedHostId, setExpandedHostId] = useState<number | null>(null);
   const { filter} = useFilter(); // Use the filter from context
@@ -22,23 +24,24 @@ export const Hosts: React.FC<HostsProps> = ({ hostType, reload }) => {
   const fetchData = useCallback(async () => {
     try {
       if (hostType) {
-        const response = await axios.get(`http://127.0.0.1:8000/sources/${hostType}/`);
+        const response = await axios.get(API_ENDPOINTS.sources + hostType + '/');
         setHosts(response.data);
       }
+      onSuccess();
     } catch (error) {
       console.error('Error fetching data:', error);
     }
-  }, [hostType]);
+  }, [hostType, onSuccess]);
 
   useEffect(() => {
-    fetchData();
-  }, [hostType, reload, fetchData]);
+    fetchData().then(r => console.log('Hosts fetched successfully'));
+  }, [hostType, reload, fetchData, onSuccess]);
 
   const handleDelete = async (hostId: number) => {
     try {
-      await axios.delete(`http://127.0.0.1:8000/sources/${hostId}/`);
+      await axios.delete(API_ENDPOINTS.sources + hostId);
       console.log('Host deleted successfully');
-      fetchData(); // Trigger a reload after successfully deleting a host
+      fetchData();
     } catch (error) {
       console.error('Error deleting host:', error);
     }

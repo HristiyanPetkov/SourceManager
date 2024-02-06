@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import {API_ENDPOINTS} from "../config/config";
 
 interface AddHostFormProps {
   onSuccess: () => void;
@@ -14,7 +15,7 @@ export const AddHost: React.FC<AddHostFormProps> = ({ onSuccess }) => {
     event.preventDefault();
 
     try {
-      await axios.post('http://127.0.0.1:8000/sources/', {
+      await axios.post(API_ENDPOINTS.sources, {
         type: hostType,
         value: hostValue,
         comment: comment,

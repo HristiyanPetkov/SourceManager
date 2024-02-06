@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { API_ENDPOINTS } from "../config/config";
 import axios from 'axios';
 
 export const Login = () => {
@@ -9,7 +10,7 @@ export const Login = () => {
 
     const handleLogin = async () => {
         try {
-            const response = await axios.post('http://127.0.0.1:8000/login/', {
+            const response = await axios.post(API_ENDPOINTS.login, {
                                                 email: email,
                                                 password: password,
                                               });

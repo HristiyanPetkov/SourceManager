@@ -20,6 +20,11 @@ export const HostSelector = () => {
     setReloadHosts(false);
   };
 
+  const handleGetHostsSuccess = () => {
+    console.log("Hosts fetched successfully");
+    setReloadHosts(false);
+  }
+
   const handleAddHostSuccess = () => {
     console.log("Host added successfully");
     setReloadHosts(true);
@@ -71,7 +76,7 @@ export const HostSelector = () => {
         className={activeButton === "button3" ? "content active" : "content"}
       />
 
-      <Hosts hostType={activeType} reload={reloadHosts} />
+      <Hosts hostType={activeType} reload={reloadHosts} onSuccess={handleGetHostsSuccess} />
       <AddHost onSuccess={handleAddHostSuccess} />
     </div>
   );
