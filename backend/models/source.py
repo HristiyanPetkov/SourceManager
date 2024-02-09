@@ -1,4 +1,5 @@
 import logging
+from datetime import datetime
 from sqlalchemy import Column, Integer, String, ForeignKey, event
 from database import Base
 from sqlalchemy.orm import relationship
@@ -27,15 +28,18 @@ class Source(Base):
 
 @event.listens_for(Source, 'before_insert')
 def before_insert_listener(mapper, connection, target):
-    logger.info(f"Inserting a new Source record: ID={target.id}, Type={target.type}, Value={target.value}, Comment={target.comment}, OrganizationID={target.organization_id}")
+    timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    logger.info(f"{timestamp} - Inserting a new Source record: ID={target.id}, Type={target.type}, Value={target.value}, Comment={target.comment}, OrganizationID={target.organization_id}")
 
 
 @event.listens_for(Source, 'before_update')
 def before_update_listener(mapper, connection, target):
+    timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     changes = {attr.key: getattr(target, attr.key, None) for attr in target.__table__.columns}
-    logger.info(f"Updating Source record: ID={target.id}, Changes={changes}, OrganizationID={target.organization_id}")
+    logger.info(f"{timestamp} - Updating Source record: ID={target.id}, Changes={changes}, OrganizationID={target.organization_id}")
 
 
 @event.listens_for(Source, 'before_delete')
 def before_delete_listener(mapper, connection, target):
-    logger.info(f"Deleting Source record: ID={target.id}, Type={target.type}, Value={target.value}, Comment={target.comment}, OrganizationID={target.organization_id}")
+    timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    logger.info(f"{timestamp} - Deleting Source record: ID={target.id}, Type={target.type}, Value={target.value}, Comment={target.comment}, OrganizationID={target.organization_id}")

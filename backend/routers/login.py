@@ -3,7 +3,6 @@ from sqlalchemy.orm import Session
 
 from dependencies import get_db
 import crud.user as user_crud
-from schemas.organization import Organization
 from schemas.user import UserLogin, UserResponse
 
 router = APIRouter(
