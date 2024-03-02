@@ -11,27 +11,28 @@ interface Host {
 }
 
 interface HostsProps {
+  organizationId: number;
   hostType: string;
   reload: boolean;
   onSuccess: () => void;
 }
 
-export const Hosts: React.FC<HostsProps> = ({ hostType, reload, onSuccess}) => {
+export const Hosts: React.FC<HostsProps> = ({ organizationId, hostType, reload, onSuccess}) => {
   const [hosts, setHosts] = useState<Host[]>([]);
   const [expandedHostId, setExpandedHostId] = useState<number | null>(null);
-  const { filter} = useFilter(); // Use the filter from context
+  const { filter} = useFilter();
 
   const fetchData = useCallback(async () => {
     try {
       if (hostType) {
-        const response = await axios.get(API_ENDPOINTS.sources + hostType + '/');
+        const response = await axios.get(API_ENDPOINTS.sources + hostType + '/' + organizationId);
         setHosts(response.data);
       }
       onSuccess();
     } catch (error) {
       console.error('Error fetching data:', error);
     }
-  }, [hostType, onSuccess]);
+  }, [organizationId, hostType, onSuccess]);
 
   useEffect(() => {
     fetchData().then(r => console.log('Hosts fetched successfully'));

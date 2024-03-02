@@ -3,10 +3,12 @@ import axios from 'axios';
 import {API_ENDPOINTS} from "../config/config";
 
 interface AddHostFormProps {
+  userId: number;
+  organizationId: number;
   onSuccess: () => void;
 }
 
-export const AddHost: React.FC<AddHostFormProps> = ({ onSuccess }) => {
+export const AddHost: React.FC<AddHostFormProps> = ({ userId, organizationId, onSuccess }) => {
   const [hostType, setHostType] = useState<string>('ip');
   const [hostValue, setHostValue] = useState<string>('');
   const [comment, setComment] = useState<string>('');
@@ -19,7 +21,8 @@ export const AddHost: React.FC<AddHostFormProps> = ({ onSuccess }) => {
         type: hostType,
         value: hostValue,
         comment: comment,
-        organization_id: 1,
+        organization_id: organizationId,
+        user_id: userId,
       });
 
       setHostType('ip');
@@ -66,6 +69,7 @@ export const AddHost: React.FC<AddHostFormProps> = ({ onSuccess }) => {
           <input
             type="text"
             value={comment}
+            placeholder="Optional"
             onChange={(e) => setComment(e.target.value)}
             className="border p-2 ml-2 rounded-lg"
           />
