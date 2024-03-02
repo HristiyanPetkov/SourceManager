@@ -24,8 +24,6 @@ def read_organization(organization_id: int, db: Session):
 
 def update_organization(organization_id: int, organization: organization_schema.OrganizationCreate, db: Session):
     old_organization = read_organization(organization_id, db)
-    if not old_organization:
-        raise HTTPException(status_code=404, detail="Organization not found")
     old_organization.name = organization.name
     db.commit()
     db.refresh(old_organization)
@@ -34,11 +32,9 @@ def update_organization(organization_id: int, organization: organization_schema.
 
 def delete_organization(organization_id: int, db: Session):
     organization = read_organization(organization_id, db)
-    if organization:
-        db.delete(organization)
-        db.commit()
-        return {"message": "Organization deleted successfully"}
-    raise HTTPException(status_code=404, detail="Organization not found")
+    db.delete(organization)
+    db.commit()
+    return {"message": "Organization deleted successfully"}
 
 
 def list_all(db: Session, skip: int = 0, limit: int = 100):
@@ -49,7 +45,12 @@ def list_all(db: Session, skip: int = 0, limit: int = 100):
 
 
 def get_organization_name(db: Session, organization_id: int) -> str:
-    organization = (db.query(organization_model.Organization)
-                    .filter(organization_model.Organization.id == organization_id)
-                    .first())
+    organization = read_organization(organization_id, db)
     return organization.name if organization else None
+
+
+def get_organization_by_name(db: Session, organization_name: str):
+    organization = (db.query(organization_model.Organization)
+                    .filter(organization_model.Organization.name == organization_name)
+                    .first())
+    return organization

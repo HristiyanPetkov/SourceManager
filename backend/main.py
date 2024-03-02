@@ -1,8 +1,8 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI
 
 from database import Base, engine
 from models import user, organization, source
-from routers import sources, users, organizations, login
+from routers import sources, users, organizations
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
@@ -43,4 +43,3 @@ def startup_event():
 app.include_router(users.router)
 app.include_router(organizations.router)
 app.include_router(sources.router)
-app.include_router(login.router)
