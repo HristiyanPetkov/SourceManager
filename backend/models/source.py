@@ -9,12 +9,6 @@ logging.basicConfig(filename='log_file.log', level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-class SourceType(Enum):
-    ip = "ip"
-    domain = "domain"
-    ip_range = "ip_range"
-
-
 class Source(Base):
     __tablename__ = 'sources'
     id = Column(Integer, primary_key=True, index=True)
@@ -22,7 +16,9 @@ class Source(Base):
     value = Column(String(50), index=True)
     comment = Column(String(50), nullable=False)
     organization_id = Column(Integer, ForeignKey('organizations.id'))
+    user_id = Column(Integer, ForeignKey('users.id'))
 
+    user = relationship("User", back_populates="source")
     organization = relationship("Organization", back_populates="source")
 
 

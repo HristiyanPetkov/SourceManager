@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 
 import crud.source as source_crud
 from dependencies import get_db
-from schemas.source import Source, SourceCreate
+from schemas.source import Source, SourceCreate, SourceType
 
 router = APIRouter(
     prefix="/sources",
@@ -22,19 +22,9 @@ def show(source_id: int, db: Session = Depends(get_db)):
     return source_crud.read_source(source_id, db)
 
 
-@router.get("/ips/", response_model=list[Source])
-def show(db: Session = Depends(get_db)):
-    return source_crud.read_source_ip_hosts(db)
-
-
-@router.get("/ip_ranges/", response_model=list[Source])
-def show(db: Session = Depends(get_db)):
-    return source_crud.read_source_ip_range_hosts(db)
-
-
-@router.get("/domains/", response_model=list[Source])
-def show(db: Session = Depends(get_db)):
-    return source_crud.read_source_domain_hosts(db)
+@router.get("/{type}/{organization_id}", response_model=list[Source])
+def show(type: str, organization_id: int, db: Session = Depends(get_db)):
+    return source_crud.read_source_by_type(SourceType(type), organization_id, db)
 
 
 @router.post("/", response_model=Source)

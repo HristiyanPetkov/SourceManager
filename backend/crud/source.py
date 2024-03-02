@@ -14,7 +14,7 @@ class SourceType(Enum):
 
 
 def create_source(source: source_schema.SourceCreate, db: Session):
-    db_source = source_model.Source(type=source.type.name, value=source.value, comment=source.comment, organization_id=source.organization_id)
+    db_source = source_model.Source(type=source.type.name, value=source.value, comment=source.comment, organization_id=source.organization_id, user_id=source.user_id)
     db.add(db_source)
     db.commit()
     db.refresh(db_source)
@@ -32,12 +32,11 @@ def read_source(source_id: int, db: Session):
 
 def update_source(source_id: int, source: source_schema.SourceCreate, db: Session):
     old_source = read_source(source_id, db)
-    if not old_source:
-        raise HTTPException(status_code=404, detail="Source not found")
     old_source.type = source.type.name
     old_source.value = source.value
     old_source.comment = source.comment
     old_source.organization_id = source.organization_id
+    old_source.user_id = source.user_id
     db.commit()
     db.refresh(old_source)
     return old_source
@@ -45,11 +44,9 @@ def update_source(source_id: int, source: source_schema.SourceCreate, db: Sessio
 
 def delete_source(source_id: int, db: Session):
     source = read_source(source_id, db)
-    if source:
-        db.delete(source)
-        db.commit()
-        return {"message": "Source deleted successfully"}
-    raise HTTPException(status_code=404, detail="Source not found")
+    db.delete(source)
+    db.commit()
+    return {"message": "Source deleted successfully"}
 
 
 def list_all(db: Session, skip: int = 0, limit: int = 100):
@@ -59,19 +56,9 @@ def list_all(db: Session, skip: int = 0, limit: int = 100):
             .all())
 
 
-def read_source_ip_hosts(db):
+def read_source_by_type(type: SourceType, organization_id: int, db: Session):
+
     return (db.query(source_model.Source)
-            .filter(source_model.Source.type == SourceType.ip.name)
-            .all())
-
-
-def read_source_ip_range_hosts(db):
-    return (db.query(source_model.Source)
-            .filter(source_model.Source.type == SourceType.ip_range.name)
-            .all())
-
-
-def read_source_domain_hosts(db):
-    return (db.query(source_model.Source)
-            .filter(source_model.Source.type == SourceType.domain.name)
+            .filter(source_model.Source.type == type,
+                    source_model.Source.organization_id == organization_id)
             .all())

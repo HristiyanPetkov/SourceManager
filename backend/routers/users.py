@@ -35,3 +35,8 @@ def update(user_id: int, user: UserCreate, db: Session = Depends(get_db)):
 @router.delete("/{user_id}")
 def delete(user_id: int, db: Session = Depends(get_db)):
     return user_crud.delete_user(user_id, db)
+
+
+@router.get("/{userEmail}", response_model=UserResponse)
+def show(user_email: str, db: Session = Depends(get_db)):
+    return user_crud.read_user_by_email(user_email, db)

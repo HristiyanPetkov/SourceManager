@@ -4,20 +4,21 @@ from fastapi import HTTPException
 from sqlalchemy.orm import Session
 
 from models import user as user_model, organization as organization_model
+from crud.organization import get_organization_name, get_organization_by_name, create_organization
 from schemas import user as user_schema
+from schemas import organization as organization_schema
 
 
 def create_user(user: user_schema.UserCreate, db: Session):
-    hashed_password_bytes = bcrypt.hashpw(user.password.encode('utf-8'), bcrypt.gensalt())
-    hashed_password_str = base64.b64encode(hashed_password_bytes).decode('utf-8')
+    organization = get_organization_by_name(db, user.organization)
+    if not organization:
+        organization = create_organization(organization_schema.OrganizationCreate(name=user.organization), db)
 
     db_user = user_model.User(
         name=user.name,
         email=user.email,
         comment=user.comment,
-        phone=user.phone,
-        organization_id=user.organization_id,
-        password=hashed_password_str
+        organization_id=organization.id,
     )
 
     db.add(db_user)
@@ -27,42 +28,39 @@ def create_user(user: user_schema.UserCreate, db: Session):
     return get_user_response(db_user, db)
 
 
-def read_user(user_id: int, db: Session):
+def read_raw_user(user_id: int, db: Session):
     user = (db.query(user_model.User)
             .filter(user_model.User.id == user_id)
             .first())
 
     if user:
-        return get_user_response(user, db)
+        return user
     raise HTTPException(status_code=404, detail="User not found")
 
 
+def read_user(user_id: int, db: Session):
+    user = read_raw_user(user_id, db)
+    return get_user_response(user, db)
+
+
 def update_user(user_id: int, user: user_schema.UserCreate, db: Session):
-    old_user = read_user(user_id, db)
-    if not old_user:
-        raise HTTPException(status_code=404, detail="User not found")
+    old_user = read_raw_user(user_id, db)
     old_user.name = user.name
     old_user.email = user.email
     old_user.comment = user.comment
-    old_user.phone = user.phone
     old_user.organization_id = user.organization_id
     db.commit()
     db.refresh(old_user)
 
-    old_user.organization_name = (db.query(organization_model.Organization)
-                           .filter(organization_model.Organization.id == old_user.organization_id)
-                           .first()).name
-
-    return old_user
+    return get_user_response(old_user, db)
 
 
 def delete_user(user_id: int, db: Session):
-    user = read_user(user_id, db)
-    if user:
-        db.delete(user)
-        db.commit()
-        return {"message": "User deleted successfully"}
-    raise HTTPException(status_code=404, detail="User not found")
+    user = read_raw_user(user_id, db)
+
+    db.delete(user)
+    db.commit()
+    return {"message": "User deleted successfully"}
 
 
 def list_all(db: Session, skip: int = 0, limit: int = 100):
@@ -75,20 +73,36 @@ def list_all(db: Session, skip: int = 0, limit: int = 100):
 
 
 def get_user_response(user: user_model.User, db: Session) -> user_schema.UserResponse:
-    organization_name = (db.query(organization_model.Organization)
-                         .filter(organization_model.Organization.id == user.organization_id)
-                         .first()).name
+    organization_name = get_organization_name(db, user.organization_id)
 
     return user_schema.UserResponse(**user.__dict__, organization_name=organization_name)
 
 
-def login(user: user_schema.UserLogin, db: Session):
+def authenticate(user: user_schema.UserLogin, db: Session):
     db_user = (db.query(user_model.User)
                .filter(user_model.User.email == user.email)
                .first())
 
-    if db_user:
-        if bcrypt.checkpw(user.password.encode('utf-8'), base64.b64decode(db_user.password.encode('utf-8'))):
-            return get_user_response(db_user, db)
-        raise HTTPException(status_code=404, detail="Incorrect password")
-    raise HTTPException(status_code=404, detail="User not found")
+    if bcrypt.checkpw(user.password.encode('utf-8'), base64.b64decode(db_user.password.encode('utf-8'))):
+        return get_user_response(db_user, db)
+    raise HTTPException(
+        status_code=401,
+        detail="Incorrect email or password",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
+
+
+def read_user_by_email(user_email: str, db: Session):
+    user = (db.query(user_model.User)
+            .filter(user_model.User.email == user_email)
+            .first())
+
+    if user:
+        return get_user_response(user, db)
+    else :
+        create_user(user_schema.UserCreate(
+            name=user_email,
+            email=user_email,
+            comment="",
+            organization_id=1,
+        ), db)
