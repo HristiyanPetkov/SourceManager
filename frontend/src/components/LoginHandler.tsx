@@ -8,17 +8,17 @@ export const LoginHandler = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        console.log("LoginHandler useEffect");
         const urlParams = new URLSearchParams(window.location.search);
         const code = urlParams.get('code');
-        console.log("Code: ", code);
         localStorage.setItem('code', code as string);
         localStorage.setItem('refresh_token', urlParams.get('refresh_token') as string);
 
         if (code) {
-            exchangeCodeForToken(code as string).then(r =>{
-                console.log('Token exchanged successfully');
-            });
+            exchangeCodeForToken(code as string).then(
+                () => {
+                    console.log("Token exchanged");
+                }
+            )
         }
     }, );
 
@@ -47,29 +47,20 @@ export const LoginHandler = () => {
     }
 
     const getUser = async (keyCloakToken: string) => {
-        console.log(keyCloakToken)
         const decodedToken = JSON.parse(atob(keyCloakToken.split('.')[1]));
-        console.log("Decoded Token: ", decodedToken);
-        console.log("Name: ", decodedToken.name);
-        console.log("Email: ", decodedToken.email);
-        console.log("Organization: ", decodedToken.organization);
-        console.log("Comment: ", decodedToken.comment);
 
-        const response = await axios.post(`${API_ENDPOINTS.user}`, {
+        const response = await axios.post(`${API_ENDPOINTS.user}${decodedToken.email}`, {
             email: decodedToken.email,
             name: decodedToken.name,
             organization: decodedToken.organization,
             comment: decodedToken.comment
         });
 
-        console.log("User: ", response.data);
-
         return response.data;
     }
-
     return (
-        <div className="pt-16">
-            <h1>Logging in</h1>
+        <div className="flex justify-center items-center h-screen text-white text-3xl">
+            <h1>Login in progress...</h1>
         </div>
     );
 }

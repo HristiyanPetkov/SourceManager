@@ -35,14 +35,14 @@ export const Hosts: React.FC<HostsProps> = ({ organizationId, hostType, reload, 
   }, [organizationId, hostType, onSuccess]);
 
   useEffect(() => {
-    fetchData().then(r => console.log('Hosts fetched successfully'));
+    fetchData().then(() => console.log('Hosts fetched successfully'));
   }, [hostType, reload, fetchData, onSuccess]);
 
   const handleDelete = async (hostId: number) => {
     try {
       await axios.delete(API_ENDPOINTS.sources + hostId);
       console.log('Host deleted successfully');
-      fetchData();
+      await fetchData();
     } catch (error) {
       console.error('Error deleting host:', error);
     }

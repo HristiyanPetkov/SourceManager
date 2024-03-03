@@ -37,6 +37,6 @@ def delete(user_id: int, db: Session = Depends(get_db)):
     return user_crud.delete_user(user_id, db)
 
 
-@router.get("/{userEmail}", response_model=UserResponse)
-def show(user_email: str, db: Session = Depends(get_db)):
-    return user_crud.read_user_by_email(user_email, db)
+@router.post("/{user_email}", response_model=UserResponse)
+def show(user_email: str, user: UserCreate, db: Session = Depends(get_db)):
+    return user_crud.read_user_by_email(user_email, user, db)

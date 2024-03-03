@@ -92,17 +92,12 @@ def authenticate(user: user_schema.UserLogin, db: Session):
     )
 
 
-def read_user_by_email(user_email: str, db: Session):
-    user = (db.query(user_model.User)
+def read_user_by_email(user_email: str, user: user_schema.UserCreate, db: Session):
+    db_user = (db.query(user_model.User)
             .filter(user_model.User.email == user_email)
             .first())
 
-    if user:
-        return get_user_response(user, db)
-    else :
-        create_user(user_schema.UserCreate(
-            name=user_email,
-            email=user_email,
-            comment="",
-            organization_id=1,
-        ), db)
+    if db_user:
+        return get_user_response(db_user, db)
+    else:
+        return create_user(user, db)
