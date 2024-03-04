@@ -10,7 +10,6 @@ export const LoginHandler = () => {
     useEffect(() => {
         const urlParams = new URLSearchParams(window.location.search);
         const code = urlParams.get('code');
-        localStorage.setItem('code', code as string);
         localStorage.setItem('refresh_token', urlParams.get('refresh_token') as string);
 
         if (code) {

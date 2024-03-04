@@ -57,7 +57,6 @@ def list_all(db: Session, skip: int = 0, limit: int = 100):
 
 
 def read_source_by_type(type: SourceType, organization_id: int, db: Session):
-
     return (db.query(source_model.Source)
             .filter(source_model.Source.type == type,
                     source_model.Source.organization_id == organization_id)

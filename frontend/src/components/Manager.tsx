@@ -9,7 +9,6 @@ interface User {
     name: string,
     email: string,
     comment: string,
-    phone: string,
     organization_id: number,
     organization_name: string,
 }
