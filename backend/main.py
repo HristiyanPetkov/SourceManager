@@ -1,11 +1,17 @@
 from fastapi import FastAPI
 
 from database import Base, engine
-from models import user, organization, source
 from routers import sources, users, organizations
 from fastapi.middleware.cors import CORSMiddleware
+from contextlib import asynccontextmanager
 
-app = FastAPI()
+
+@asynccontextmanager
+async def lifespan():
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
+
+app = FastAPI(lifespan=lifespan)
 
 origins = [
     "http://localhost",
@@ -29,15 +35,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-
-@app.on_event("startup")
-def startup_event():
-    Base.metadata.create_all(bind=engine, tables=[
-        user.User.__table__,
-        organization.Organization.__table__,
-        source.Source.__table__
-    ])
 
 
 app.include_router(users.router)
