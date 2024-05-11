@@ -32,6 +32,9 @@ jobs:
   docker_build_and_push:
     needs: build_and_test
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./backend
 
     steps:
       - name: Checkout repository
