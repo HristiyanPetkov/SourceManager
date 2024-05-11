@@ -26,12 +26,8 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - uses: actions/checkout@v2
-      - uses: excitedleigh/setup-nox@v2.0.0
-      - run: nox
-
       - name: Run tests
-        run: nox
+        run: pytest
 
   docker_build_and_push:
     needs: build_and_test
