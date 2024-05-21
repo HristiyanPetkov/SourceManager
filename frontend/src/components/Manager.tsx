@@ -3,6 +3,7 @@ import "./activeContent.css";
 import { Hosts } from "./Hosts";
 import { AddHost } from "./AddHost";
 import {useLocation} from "react-router-dom";
+import {CustomButton} from "./CutomButton";
 
 interface User {
     id: number,
@@ -59,31 +60,10 @@ export const Manager = () => {
             }
             <div>
                 <AddHost userId={user.id} organizationId={user.organization_id} onSuccess={handleAddHostSuccess} />
-                <div id="buttonContainer" className="flex space-x-4 mb-4">
-                    <button
-                      onClick={() => handleButtonClick("button1")}
-                      className={`bg-dark-blue hover:bg-button-action text-white py-2 px-4 rounded-lg ${
-                        activeButton === "button1" && "animate-pulse"
-                      }`}
-                    >
-                      Ip host
-                    </button>
-                    <button
-                      onClick={() => handleButtonClick("button2")}
-                      className={`bg-dark-blue hover:bg-button-action text-white py-2 px-4 rounded-lg ${
-                        activeButton === "button2" && "animate-pulse"
-                      }`}
-                    >
-                      Ip range
-                    </button>
-                    <button
-                      onClick={() => handleButtonClick("button3")}
-                      className={`bg-dark-blue hover:bg-button-action text-white py-2 px-4 rounded-lg ${
-                        activeButton === "button3" && "animate-pulse"
-                      }`}
-                    >
-                      Domain host
-                    </button>
+                <div id="buttonContainer" className="flex space-x-4 mb-4 justify-center">
+                    <CustomButton onClick={() => handleButtonClick("button1")}>Ip host</CustomButton>
+                    <CustomButton onClick={() => handleButtonClick("button2")}>Ip range</CustomButton>
+                    <CustomButton onClick={() => handleButtonClick("button3")}>Domain host</CustomButton>
                 </div>
 
                 <div
