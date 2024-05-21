@@ -53,7 +53,7 @@ export const AddHost: React.FC<AddHostFormProps> = ({ userId, organizationId, on
       </div>
 
       <InputField label="Host Value" value={hostValue} setValue={setHostValue} />
-      <InputField label="Comment (Optional)" value={comment} setValue={setComment} />
+      <InputField label="Comment" value={comment} placeholder="Optional" setValue={setComment} />
 
       <button type="submit" className="bg-dark-blue hover:bg-button-action text-white py-2 px-4 rounded-lg">
         Add Host
