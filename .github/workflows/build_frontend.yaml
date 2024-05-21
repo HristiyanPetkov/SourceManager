@@ -1,4 +1,4 @@
-name: Build, Test and Deploy Backend
+name: Build, Test and Deploy Frontend
 
 on:
   push:
@@ -9,32 +9,29 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./backend
+        working-directory: ./frontend
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - name: Install Node.js
+        uses: actions/setup-node@v2
         with:
-          python-version: '3.10'
-          architecture: 'x64'
+          node-version: '20'
 
       - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
+        run: npm install
 
-      - name: Run tests
-        run: pytest
+      - name: Build frontend
+        run: npm run build
 
   docker_build_and_push:
     needs: build_and_test
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./backend
+        working-directory: ./frontend
 
     steps:
       - name: Checkout repository
@@ -44,7 +41,7 @@ jobs:
         run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build Docker image
-        run: docker build -t sylse/source-manager-backend:latest .
+        run: docker build -t sylse/source-manager-frontend:latest .
 
       - name: Push Docker image
-        run: docker push sylse/source-manager-backend:latest
+        run: docker push sylse/source-manager-frontend:latest
