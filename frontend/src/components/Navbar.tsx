@@ -2,6 +2,7 @@ import { useFilter } from '../context/FilterContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome } from '@fortawesome/free-solid-svg-icons';
 import { UserActions } from "./UserActions";
+import React from "react";
 
 export const Navbar: React.FC = () => {
   const { filter, setFilter } = useFilter();
