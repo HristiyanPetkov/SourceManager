@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import {API_ENDPOINTS} from "../config/config";
+import {InputField} from "./InputField";
 
 interface AddHostFormProps {
   userId: number;
@@ -51,30 +52,8 @@ export const AddHost: React.FC<AddHostFormProps> = ({ userId, organizationId, on
         </label>
       </div>
 
-      <div className="mb-4">
-        <label className="block">
-          Host Value:
-          <input
-            type="text"
-            value={hostValue}
-            onChange={(e) => setHostValue(e.target.value)}
-            className="border p-2 ml-2 rounded-lg"
-          />
-        </label>
-      </div>
-
-      <div className="mb-4">
-        <label className="block">
-          Comment:
-          <input
-            type="text"
-            value={comment}
-            placeholder="Optional"
-            onChange={(e) => setComment(e.target.value)}
-            className="border p-2 ml-2 rounded-lg"
-          />
-        </label>
-      </div>
+      <InputField label="Host Value" value={hostValue} setValue={setHostValue} />
+      <InputField label="Comment" value={comment} placeholder="Optional" setValue={setComment} />
 
       <button type="submit" className="bg-dark-blue hover:bg-button-action text-white py-2 px-4 rounded-lg">
         Add Host
