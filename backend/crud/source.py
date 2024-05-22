@@ -1,16 +1,9 @@
-from enum import Enum
-
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
 
 from models import source as source_model
 from schemas import source as source_schema
-
-
-class SourceType(Enum):
-    ip = "ip"
-    domain = "domain"
-    ip_range = "ip_range"
+from schemas.source import SourceType
 
 
 def create_source(source: source_schema.SourceCreate, db: Session):
